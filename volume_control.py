@@ -27,6 +27,8 @@ if __name__ == '__main__':
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = cast(interface, POINTER(IAudioEndpointVolume))
 
+    vol = 0
+
     while True:
         # Leitura de frame
         _, img = capture.read()
@@ -43,6 +45,12 @@ if __name__ == '__main__':
             center_y = (y1 + y2) // 2
 
             img = hand_detector.draw_in_position(img, [x1, x2, center_x], [y1, y2, center_y])
+            cv2.putText(img, f"{vol}%", (x2, y2), cv2.FONT_HERSHEY_DUPLEX, 1, (30, 186, 35),
+                        3)
+
+            length = math.hypot(x2 - x1, y2 - y1)
+            #print(length)
+            hand_range = []
 
 
         cv2.imshow('Video', img)
