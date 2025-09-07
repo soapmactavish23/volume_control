@@ -45,12 +45,20 @@ if __name__ == '__main__':
             center_y = (y1 + y2) // 2
 
             img = hand_detector.draw_in_position(img, [x1, x2, center_x], [y1, y2, center_y])
-            cv2.putText(img, f"{vol}%", (x2, y2), cv2.FONT_HERSHEY_DUPLEX, 1, (30, 186, 35),
+            cv2.putText(img, f"{int(vol * 100)}%", (x2, y2), cv2.FONT_HERSHEY_DUPLEX, 1, (30, 186, 35),
                         3)
+            cv2.line(img, (x1, y1), (x2, y2), (30, 186, 35), 3)
 
             length = math.hypot(x2 - x1, y2 - y1)
             #print(length)
-            hand_range = []
+            hand_range = [80, 325]
+
+            vol = (length - hand_range[0]) / hand_range[1]
+
+            if vol > 1: vol = 1
+            if vol < 0: vol = 0
+
+            volume.SetMasterVolumeLevelScalar(vol, None)
 
 
         cv2.imshow('Video', img)
