@@ -28,6 +28,7 @@ if __name__ == '__main__':
     volume = cast(interface, POINTER(IAudioEndpointVolume))
 
     vol = 0
+    vol_bar = 400
 
     while True:
         # Leitura de frame
@@ -58,8 +59,17 @@ if __name__ == '__main__':
             if vol > 1: vol = 1
             if vol < 0: vol = 0
 
+            vol_bar = np.interp(length, hand_range, [400, 150])
+            vol_percentage = np.interp(length, hand_range, [0, 100])
+
             volume.SetMasterVolumeLevelScalar(vol, None)
 
+        # Desenhar a barra do volume
+        cv2.rectangle(img, (50, 150), (85, 400), (30, 30, 186), 3)
 
+        # Completar o interior da barra de volume
+        cv2.rectangle(img, (50, int(vol_bar)), (85, 400), (30, 186, 35), cv2.FILLED)
+
+        # Exibição de Frame
         cv2.imshow('Video', img)
         cv2.waitKey(1)
